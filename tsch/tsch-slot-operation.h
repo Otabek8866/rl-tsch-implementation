@@ -44,6 +44,7 @@
 
 #include "contiki.h"
 #include "lib/ringbufindex.h"
+#include "customized-tsch-file.h"
 
 /***** External Variables *****/
 
@@ -93,6 +94,23 @@ void tsch_slot_operation_sync(rtimer_clock_t next_slot_start,
  * Start actual slot operation
  */
 void tsch_slot_operation_start(void);
+
+/**************************** My modifications - Start ********************************/
+// function to return the queue --> tx
+queue_packet_status *func_custom_queue_tx();
+
+// function to return the queue --> rx
+queue_packet_status *func_custom_queue_rx();
+
+// lock and unlock tx queue
+void unlock_queue_tx();
+void lock_queue_tx();
+
+// lock and unlock rx queue
+void unlock_queue_rx();
+void lock_queue_rx();
+
+/**************************** My modifications - End **********************************/
 
 #endif /* __TSCH_SLOT_OPERATION_H__ */
 /** @} */

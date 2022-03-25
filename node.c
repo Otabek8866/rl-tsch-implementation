@@ -9,23 +9,14 @@
 #define LOG_LEVEL LOG_LEVEL_INFO
 
 #define UDP_PORT 8765
-#define SEND_INTERVAL (60 * CLOCK_SECOND)
+#define SEND_INTERVAL (30 * CLOCK_SECOND)
 
 #define CHECK_INTERVAL (120 * CLOCK_SECOND)
 
-// #define MAX_SIZE_MYQUEUE 20
 
 PROCESS(node_process, "RL-TSCH Schedule");
 PROCESS(custom_check_process, "CHECK MY QUEUE");
 AUTOSTART_PROCESSES(&node_process, &custom_check_process);
-
-// typedef struct
-// {
-//   int pt_seq;
-//   int retrans;
-//   int status;
-//   int slot_num;
-// } pt_status;
 
 static void init_tsch_schedule(void)
 {
@@ -138,17 +129,18 @@ PROCESS_THREAD(custom_check_process, ev, data)
     {
       PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&check_timer));
 
-	lock();
-      my_custom_queue *my_queue = my_custom_function();
-
-      for(int i=0; i < my_queue->size; i++){
-        LOG_INFO("First packet status ");
-        LOG_INFO_("seqnum:%u trans_count:%u timeslot:%u \n", 
-        my_queue->list[i].custom_seqno,  
-        my_queue->list[i].custom_retransmissions, 
-        my_queue->list[i].custom_time_slot);
+      //lock_queue_tx();
+      queue_packet_status *queue_tx = func_custom_queue_tx();
+      LOG_INFO(" Transmission Operations in 120 seconds\n");
+      for(int i=0; i < queue_tx->size; i++){
+        LOG_INFO("seqnum:%u trans_count:%u timeslot:%u channel_off:%u\n", 
+        queue_tx->packets[i].packet_seqno,  
+        queue_tx->packets[i].transmission_count, 
+        queue_tx->packets[i].time_slot,
+        queue_tx->packets[i].channel_offset);
       }
-      unlock();
+      emptyQueue(queue_tx);
+      //unlock_queue_tx();
       etimer_set(&check_timer, CHECK_INTERVAL);
     }
   }

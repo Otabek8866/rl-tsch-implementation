@@ -63,7 +63,9 @@ frequency hopping for enhanced reliability.
 #include "net/mac/tsch/tsch-stats.h"
 #include "net/mac/tsch/tsch-roots.h"
 
-#include "custom_file.h"
+/**************************** My modifications - Start ********************************/
+#include "customized-tsch-file.h"
+/**************************** My modifications - End **********************************/
 
 #if UIP_CONF_IPV6_RPL
 #include "net/mac/tsch/tsch-rpl.h"

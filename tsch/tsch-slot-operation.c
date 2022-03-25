@@ -54,6 +54,10 @@
 #include "net/mac/tsch/tsch.h"
 #include "sys/critical.h"
 
+/**************************** My modifications - Start ********************************/
+#include "customized-tsch-file.h"
+/**************************** My modifications - End **********************************/
+
 #include "sys/log.h"
 /* TSCH debug macros, i.e. to set LEDs or GPIOs on various TSCH
  * timeslot events */
@@ -179,15 +183,71 @@ static PT_THREAD(tsch_tx_slot(struct pt *pt, struct rtimer *t));
 static PT_THREAD(tsch_rx_slot(struct pt *pt, struct rtimer *t));
 
 
-// // **************************** My modifications - Start ********************************
-//     void print_status
-//     (linkaddr_t custom_add, uint8_t custom_seqno, uint8_t custom_retransmissions, uint8_t custom_is_data)
-//     {
-      
-//     }
+/**************************** My modifications - Start ********************************/
+// variable to check is the queue is in use
+uint8_t tx_queue_is_locked = 0;
+uint8_t rx_queue_is_locked = 0;
 
-// // **************************** My modifications - End ********************************
+// queue for tx transmissions
+queue_packet_status queue_tx =  {0, -1, 0, MAX_NUMBER_OF_CUSTOM_QUEUE};
+queue_packet_status *custom_queue_tx = &queue_tx;
 
+// queue for rx transmissions
+queue_packet_status queue_rx =  {0, -1, 0, MAX_NUMBER_OF_CUSTOM_QUEUE};
+queue_packet_status *custom_queue_rx = &queue_rx;
+
+// variables to store every attempt
+packet_status ptk_tx;
+packet_status ptk_rx;
+
+/* ---------------  Additinal settings --------------------------------
+// variables to store the current attempt --> tx
+uint8_t data_type_tx;
+uint8_t packet_seqno_tx;
+uint8_t transmission_count_tx;
+uint8_t time_slot_tx;
+uint8_t channel_offset_tx;
+uint8_t node_id;
+linkaddr_t dest_addr_tx;
+
+// variables to store the current attempt --> rx
+uint8_t data_type_rx;
+uint8_t packet_seqno_rx;
+uint8_t transmission_count_rx;
+uint8_t time_slot_rx;
+uint8_t channel_offset_rx;
+uint8_t node_id;
+linkaddr_t dest_addr_rx;
+--------------------------------------------------------------------*/
+
+// function to return the queue --> tx
+queue_packet_status *func_custom_queue_tx(){
+  return custom_queue_tx;
+}
+
+// function to return the queue --> rx
+queue_packet_status *func_custom_queue_rx(){
+  return custom_queue_rx;
+}
+
+// lock and unlock tx queue
+void unlock_queue_tx(){
+  tx_queue_is_locked = 0;
+  emptyQueue(custom_queue_tx);
+}
+void lock_queue_tx(){
+  tx_queue_is_locked = 1;
+}
+
+// lock and unlock rx queue
+void unlock_queue_rx(){
+  rx_queue_is_locked = 0;
+  emptyQueue(custom_queue_rx);
+}
+void lock_queue_rx(){
+  rx_queue_is_locked = 1;
+}
+/**************************** My modifications - End **********************************/
 
 /*---------------------------------------------------------------------------*/
 /* TSCH locking system. TSCH is locked during slot operations */
@@ -726,6 +786,21 @@ PT_THREAD(tsch_tx_slot(struct pt *pt, struct rtimer *t))
     current_packet->transmissions++;
     current_packet->ret = mac_tx_status;
 
+/**************************** My modifications - Start ********************************/
+  uint8_t check_data = ((((uint8_t *)(queuebuf_dataptr(current_packet->qb)))[0]) & 7) == FRAME802154_DATAFRAME;
+  if(current_neighbor != NULL && current_neighbor->is_time_source && 
+  mac_tx_status == MAC_TX_OK && tx_queue_is_locked == 0 && check_data == 1) {
+    //packet_status ptk_tx;
+    ptk_tx.data_type = UNICAST_DATA;
+    ptk_tx.packet_seqno = queuebuf_attr(current_packet->qb, PACKETBUF_ATTR_MAC_SEQNO);
+    ptk_tx.transmission_count = current_packet->transmissions;
+    ptk_tx.time_slot = current_link->timeslot;
+    ptk_tx.channel_offset = current_link->channel_offset;
+    enqueue(custom_queue_tx, ptk_tx);
+  }
+
+/**************************** My modifications - End **********************************/
+
     /* Post TX: Update neighbor queue state */
     in_queue = tsch_queue_packet_sent(current_neighbor, current_packet, current_link, mac_tx_status);
 
@@ -756,19 +831,6 @@ PT_THREAD(tsch_tx_slot(struct pt *pt, struct rtimer *t))
         linkaddr_copy(&log->tx.dest, queuebuf_addr(current_packet->qb, PACKETBUF_ADDR_RECEIVER));
         log->tx.seqno = queuebuf_attr(current_packet->qb, PACKETBUF_ATTR_MAC_SEQNO);
     );
-
-// // **************************** My modifications - Start ******************************
-//     if(mac_tx_status == MAC_TX_OK){
-//       uint8_t custom_is_data = ((((uint8_t *)(queuebuf_dataptr(current_packet->qb)))[0]) & 7) == FRAME802154_DATAFRAME;
-//       uint8_t custom_seqno = ueuebuf_attr(current_packet->qb, PACKETBUF_ATTR_MAC_SEQNO);
-//       uint8_t custom_retransmissions = urrent_packet->transmissions;
-//       linkaddr_t custom_add;
-//       linkaddr_copy(&custom_add, queuebuf_addr(current_packet->qb, PACKETBUF_ADDR_RECEIVER));
-
-//       print_status(custom_add, custom_seqno, custom_retransmissions, custom_is_data);
-//     }   
-
-// // **************************** My modifications - End ********************************
 
     /* Poll process for later processing of packet sent events and logs */
     process_poll(&tsch_pending_events_process);
