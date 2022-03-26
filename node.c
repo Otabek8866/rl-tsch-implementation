@@ -141,6 +141,20 @@ PROCESS_THREAD(custom_check_process, ev, data)
       }
       emptyQueue(queue_tx);
       //unlock_queue_tx();
+      
+      //lock_queue_rx();
+      queue_packet_status *queue_rx = func_custom_queue_rx();
+      LOG_INFO(" Receiving Operations in 120 seconds\n");
+      for(int i=0; i < queue_rx->size; i++){
+        LOG_INFO("seqnum:%u trans_count:%u timeslot:%u channel_off:%u\n", 
+        queue_rx->packets[i].packet_seqno,  
+        queue_rx->packets[i].transmission_count, 
+        queue_rx->packets[i].time_slot,
+        queue_rx->packets[i].channel_offset);
+      }
+      emptyQueue(queue_rx);
+      //unlock_queue_rx();
+      
       etimer_set(&check_timer, CHECK_INTERVAL);
     }
   }
