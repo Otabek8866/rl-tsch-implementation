@@ -27,8 +27,18 @@
 /* 6TiSCH minimal schedule length */
 #define TSCH_SCHEDULE_CONF_DEFAULT_LENGTH 8
 
-// buffer length
+// packet buffer length
 #define QUEUEBUF_CONF_NUM 4
+
+// Payload size
+#define PACKETBUF_CONF_SIZE 125
+
+// to list all the packets in the queue and get the total number
+#define QUEUEBUF_CONF_DEBUG 1
+#define QUEUEBUF_CONF_STATS 1
+
+// // MAX number of re-transmissions
+// #define TSCH_CONF_MAX_FRAME_RETRIES 3
 
 // hopping sequence
 #define TSCH_CONF_DEFAULT_HOPPING_SEQUENCE TSCH_HOPPING_SEQUENCE_2_2
@@ -48,8 +58,8 @@
 #define LOG_CONF_LEVEL_TCPIP LOG_LEVEL_WARN
 #define LOG_CONF_LEVEL_IPV6 LOG_LEVEL_WARN
 #define LOG_CONF_LEVEL_6LOWPAN LOG_LEVEL_WARN
-#define LOG_CONF_LEVEL_MAC LOG_LEVEL_INFO
+#define LOG_CONF_LEVEL_MAC LOG_LEVEL_WARN // alternative _INFO
 #define LOG_CONF_LEVEL_FRAMER LOG_LEVEL_WARN
-#define TSCH_LOG_CONF_PER_SLOT 1
+#define TSCH_LOG_CONF_PER_SLOT 0
 
 #endif /* PROJECT_CONF_H_ */

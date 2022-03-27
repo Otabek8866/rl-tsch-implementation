@@ -789,8 +789,7 @@ PT_THREAD(tsch_tx_slot(struct pt *pt, struct rtimer *t))
 /**************************** My modifications - Start ********************************/
   uint8_t check_data = ((((uint8_t *)(queuebuf_dataptr(current_packet->qb)))[0]) & 7) == FRAME802154_DATAFRAME;
   if(current_neighbor != NULL && current_neighbor->is_time_source && 
-  mac_tx_status == MAC_TX_OK && tx_queue_is_locked == 0 && check_data == 1) {
-    //packet_status ptk_tx;
+  mac_tx_status == MAC_TX_OK && tx_queue_is_locked == 0 && check_data) {
     ptk_tx.data_type = UNICAST_DATA;
     ptk_tx.packet_seqno = queuebuf_attr(current_packet->qb, PACKETBUF_ATTR_MAC_SEQNO);
     ptk_tx.transmission_count = current_packet->transmissions;
@@ -798,7 +797,6 @@ PT_THREAD(tsch_tx_slot(struct pt *pt, struct rtimer *t))
     ptk_tx.channel_offset = current_link->channel_offset;
     enqueue(custom_queue_tx, ptk_tx);
   }
-
 /**************************** My modifications - End **********************************/
 
     /* Post TX: Update neighbor queue state */
@@ -1042,7 +1040,18 @@ PT_THREAD(tsch_rx_slot(struct pt *pt, struct rtimer *t))
               tsch_timesync_update(n, since_last_timesync, -estimated_drift);
               tsch_schedule_keepalive(0);
             }
-
+/**************************** My modifications - Start ********************************/
+  //uint8_t check_data = ((((uint8_t *)(queuebuf_dataptr(current_packet->qb)))[0]) & 7) == FRAME802154_DATAFRAME;
+  if(frame.fcf.frame_type == FRAME802154_DATAFRAME) 
+  {
+    ptk_rx.data_type = UNICAST_DATA;
+    ptk_rx.packet_seqno = frame.seq;
+    ptk_rx.transmission_count = 0;
+    ptk_rx.time_slot = current_link->timeslot;
+    ptk_rx.channel_offset = current_link->channel_offset;
+    enqueue(custom_queue_rx, ptk_rx);
+  }
+/**************************** My modifications - End **********************************/
             /* Add current input to ringbuf */
             ringbufindex_put(&input_ringbuf);
 
