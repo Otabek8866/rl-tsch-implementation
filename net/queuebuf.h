@@ -119,6 +119,7 @@ int queuebuf_numfree(void);
 
 /*-------------------------- My modifications - Start ------------------------------*/
 uint8_t *getCurrentQueueLen();
+uint8_t getCustomBuffLen();
 /*-------------------------- My modifications - End ------------------------------*/
 
 #endif /* __QUEUEBUF_H__ */

@@ -478,6 +478,14 @@ queuebuf_debug_print(void)
 uint8_t *getCurrentQueueLen() {
   return &queuebuf_len;
 }
+uint8_t getCustomBuffLen(){
+  uint8_t len = 0;
+  struct queuebuf *q;
+  for(q = list_head(queuebuf_list); q != NULL; q = list_item_next(q)) {
+    len++;
+  }
+  return len;
+}
 /*-------------------------- My modifications - End ------------------------------*/
 /*---------------------------------------------------------------------------*/
 /** @} */

@@ -33,6 +33,9 @@
 // Payload size
 #define PACKETBUF_CONF_SIZE 125
 
+// print all the communication records
+#define PRINT_TRANSMISSION_RECORDS_CONF 1
+
 // to list all the packets in the queue and get the total number
 #define QUEUEBUF_CONF_DEBUG 1
 #define QUEUEBUF_CONF_STATS 1
@@ -58,7 +61,7 @@
 #define LOG_CONF_LEVEL_TCPIP LOG_LEVEL_WARN
 #define LOG_CONF_LEVEL_IPV6 LOG_LEVEL_WARN
 #define LOG_CONF_LEVEL_6LOWPAN LOG_LEVEL_WARN
-#define LOG_CONF_LEVEL_MAC LOG_LEVEL_WARN // alternative _INFO
+#define LOG_CONF_LEVEL_MAC LOG_LEVEL_WARN // alternative _INFO/WARN
 #define LOG_CONF_LEVEL_FRAMER LOG_LEVEL_WARN
 #define TSCH_LOG_CONF_PER_SLOT 0
 

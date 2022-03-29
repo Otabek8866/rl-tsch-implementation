@@ -1,4 +1,4 @@
-CONTIKI_PROJECT = node
+CONTIKI_PROJECT = new-rl-tsch
 all: $(CONTIKI_PROJECT)
 
 PLATFORMS_ONLY = cooja

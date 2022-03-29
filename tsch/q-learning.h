@@ -11,12 +11,19 @@
 #define Q_VALUE_LIST_SIZE TSCH_SCHEDULE_CONF_DEFAULT_LENGTH
 #endif
 
+// printing trans/reception records with slot numbers
+#ifdef PRINT_TRANSMISSION_RECORDS_CONF
+#define PRINT_TRANSMISSION_RECORDS PRINT_TRANSMISSION_RECORDS_CONF
+#else
+#define PRINT_TRANSMISSION_RECORDS 0
+#endif
+
 /************ Types ***********/
 // structure to store q-values
-typedef struct {
-    float val;
-    uint8_t slot_number;
-} q_value;
+// typedef struct {
+//     float val;
+//     uint8_t slot_number;
+// } q_value;
 
 // structure to store a state of the node
 typedef struct {
@@ -38,6 +45,9 @@ env_state *get_current_state(void);
 void update_q_table(uint8_t action, float got_reward);
 
 // function to return the main q-list
-q_value *get_q_table(void);
+float * get_q_table(void);
+
+// generating random q-values
+void generate_random_q_values();
 
 #endif /* Q_LEARNING_HEADER */

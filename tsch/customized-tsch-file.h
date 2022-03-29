@@ -49,7 +49,7 @@ int isEmpty(queue_packet_status *queue);
 void enqueue(queue_packet_status *queue, packet_status pkt_sts);
 
 // Function to empty the queue
-void emptyQueue(queue_packet_status *queue);
+uint8_t emptyQueue(queue_packet_status *queue);
 
 
 /* ---------------  Additional functions ----------------------*/

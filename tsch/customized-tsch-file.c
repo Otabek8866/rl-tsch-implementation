@@ -53,11 +53,13 @@ packet_status dequeue(queue_packet_status *queue)
 }
 
 // Empty the queue. It changes the front and rear pointer, makes the size 0
-void emptyQueue(queue_packet_status *queue)
+uint8_t emptyQueue(queue_packet_status *queue)
 {
+    uint8_t size = queue->size;
     queue->size = 0;
     queue->front = 0;
     queue->rear = -1;
+    return size;
 }
 
 // Function to get the front of queue
