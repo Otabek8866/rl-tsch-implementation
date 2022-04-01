@@ -18,13 +18,6 @@
 #define PRINT_TRANSMISSION_RECORDS 0
 #endif
 
-/************ Types ***********/
-// structure to store q-values
-// typedef struct {
-//     float val;
-//     uint8_t slot_number;
-// } q_value;
-
 // structure to store a state of the node
 typedef struct {
     uint8_t buffer_size;

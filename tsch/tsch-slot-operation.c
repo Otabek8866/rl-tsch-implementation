@@ -184,6 +184,7 @@ static PT_THREAD(tsch_rx_slot(struct pt *pt, struct rtimer *t));
 
 
 /**************************** My modifications - Start ********************************/
+#if RL_TSCH_ENABLED
 // variable to check is the queue is in use
 uint8_t tx_queue_is_locked = 0;
 uint8_t rx_queue_is_locked = 0;
@@ -247,6 +248,7 @@ void unlock_queue_rx(){
 void lock_queue_rx(){
   rx_queue_is_locked = 1;
 }
+#endif /* RL_TSCH_ENABLED */
 /**************************** My modifications - End **********************************/
 
 /*---------------------------------------------------------------------------*/
@@ -787,6 +789,7 @@ PT_THREAD(tsch_tx_slot(struct pt *pt, struct rtimer *t))
     current_packet->ret = mac_tx_status;
 
 /**************************** My modifications - Start ********************************/
+#if RL_TSCH_ENABLED
   uint8_t check_data = ((((uint8_t *)(queuebuf_dataptr(current_packet->qb)))[0]) & 7) == FRAME802154_DATAFRAME;
   if(current_neighbor != NULL && current_neighbor->is_time_source && 
   mac_tx_status == MAC_TX_OK && tx_queue_is_locked == 0 && check_data) {
@@ -797,6 +800,7 @@ PT_THREAD(tsch_tx_slot(struct pt *pt, struct rtimer *t))
     ptk_tx.channel_offset = current_link->channel_offset;
     enqueue(custom_queue_tx, ptk_tx);
   }
+#endif /* RL_TSCH_ENABLED */
 /**************************** My modifications - End **********************************/
 
     /* Post TX: Update neighbor queue state */

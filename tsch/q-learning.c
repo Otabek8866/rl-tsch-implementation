@@ -18,9 +18,6 @@ float discaount_factor = 0.9;
 env_state *current_state;
 
 // Q-table to store q-values, 2 index means -> action is 3, first three slots are active
-// q_value table[Q_VALUE_LIST_SIZE];
-// q_value *table[Q_VALUE_LIST_SIZE];
-// q_value *(*q_list)[];
 float q_list[Q_VALUE_LIST_SIZE];
 
 /********** Functions *********/

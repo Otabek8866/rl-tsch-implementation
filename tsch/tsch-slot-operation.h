@@ -96,6 +96,7 @@ void tsch_slot_operation_sync(rtimer_clock_t next_slot_start,
 void tsch_slot_operation_start(void);
 
 /**************************** My modifications - Start ********************************/
+#if RL_TSCH_ENABLED
 // function to return the queue --> tx
 queue_packet_status *func_custom_queue_tx();
 
@@ -109,7 +110,7 @@ void lock_queue_tx();
 // lock and unlock rx queue
 void unlock_queue_rx();
 void lock_queue_rx();
-
+#endif /* RL_TSCH_ENABLED */
 /**************************** My modifications - End **********************************/
 
 #endif /* __TSCH_SLOT_OPERATION_H__ */

@@ -118,8 +118,10 @@ void queuebuf_debug_print(void);
 int queuebuf_numfree(void);
 
 /*-------------------------- My modifications - Start ------------------------------*/
+#if QUEUEBUF_DEBUG
 uint8_t *getCurrentQueueLen();
 uint8_t getCustomBuffLen();
+#endif /* QUEUEBUF_DEBUG */
 /*-------------------------- My modifications - End ------------------------------*/
 
 #endif /* __QUEUEBUF_H__ */

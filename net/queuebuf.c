@@ -52,7 +52,9 @@
 #include <string.h> /* for memcpy() */
 
 /****************** My modification ***********/
+#if QUEUEBUF_DEBUG
 #include <stdio.h> /* for debugging printf()*/
+#endif /* QUEUEBUF_DEBUG */
 /****************** My modification ***********/
 
 /* Structure pointing to a buffer either stored
@@ -475,6 +477,7 @@ queuebuf_debug_print(void)
 #endif /* QUEUEBUF_DEBUG */
 }
 /*-------------------------- My modifications - Start ------------------------------*/
+#if QUEUEBUF_DEBUG
 uint8_t *getCurrentQueueLen() {
   return &queuebuf_len;
 }
@@ -486,6 +489,7 @@ uint8_t getCustomBuffLen(){
   }
   return len;
 }
+#endif /* QUEUEBUF_DEBUG */
 /*-------------------------- My modifications - End ------------------------------*/
 /*---------------------------------------------------------------------------*/
 /** @} */

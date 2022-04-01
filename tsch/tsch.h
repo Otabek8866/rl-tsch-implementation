@@ -66,6 +66,10 @@ frequency hopping for enhanced reliability.
 /**************************** My modifications - Start ********************************/
 #include "customized-tsch-file.h"
 #include "q-learning.h"
+#ifdef RL_TSCH_ENABLED_CONF
+#define RL_TSCH_ENABLED RL_TSCH_ENABLED_CONF
+#else
+#define RL_TSCH_ENABLED 0
 /**************************** My modifications - End **********************************/
 
 #if UIP_CONF_IPV6_RPL
