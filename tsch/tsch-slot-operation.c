@@ -1045,6 +1045,7 @@ PT_THREAD(tsch_rx_slot(struct pt *pt, struct rtimer *t))
               tsch_schedule_keepalive(0);
             }
 /**************************** My modifications - Start ********************************/
+#if RL_TSCH_ENABLED
   //uint8_t check_data = ((((uint8_t *)(queuebuf_dataptr(current_packet->qb)))[0]) & 7) == FRAME802154_DATAFRAME;
   if(frame.fcf.frame_type == FRAME802154_DATAFRAME) 
   {
@@ -1055,6 +1056,7 @@ PT_THREAD(tsch_rx_slot(struct pt *pt, struct rtimer *t))
     ptk_rx.channel_offset = current_link->channel_offset;
     enqueue(custom_queue_rx, ptk_rx);
   }
+#endif /* RL_TSCH_ENABLED */
 /**************************** My modifications - End **********************************/
             /* Add current input to ringbuf */
             ringbufindex_put(&input_ringbuf);
