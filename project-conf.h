@@ -40,8 +40,8 @@
 #define QUEUEBUF_CONF_DEBUG 1
 #define QUEUEBUF_CONF_STATS 1
 
-// // MAX number of re-transmissions
-// #define TSCH_CONF_MAX_FRAME_RETRIES 3
+// To start RL-TSCH
+#define RL_TSCH_ENABLED 1
 
 // hopping sequence
 #define TSCH_CONF_DEFAULT_HOPPING_SEQUENCE TSCH_HOPPING_SEQUENCE_2_2
