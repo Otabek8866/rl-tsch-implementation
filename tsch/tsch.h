@@ -70,6 +70,7 @@ frequency hopping for enhanced reliability.
 #define RL_TSCH_ENABLED RL_TSCH_ENABLED_CONF
 #else
 #define RL_TSCH_ENABLED 0
+#ednif
 /**************************** My modifications - End **********************************/
 
 #if UIP_CONF_IPV6_RPL
